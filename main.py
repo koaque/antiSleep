@@ -145,22 +145,25 @@ class TimerApp:
 
     def toggle_activity(self):
         self.active = not self.active
+        if int(self.spinbox_var.get()) < 1:
+            self.log_text.insert(tk.END, "ERROR: Timer cannot be zero!\n")
         if self.active:
             try:
                 self.TIMER = int(self.spinbox_var.get())
             except ValueError:
                 self.TIMER = 0
-                self.spinbox_var.set("0")
+                self.spinbox_var.set("1")
 
             self.COUNTDOWN = self.TIMER * 3600
             self.os_checker.prevent_sleep()
             self.update_timer()
+            self.update_status()
         else:
             self.os_checker.allow_sleep()
             self.active = False
             self.timer_label.config(text="Timer: 00:00:00")
             self.log_text.insert(tk.END, "Timer stopped.\n")
-        self.update_status()
+            self.update_status()
 
     def early_end(self):
         self.COUNTDOWN = 0
